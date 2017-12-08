@@ -1,13 +1,13 @@
 import React from 'react'
 
-import OperationsTable from './OperationsTable'
+import OperationsContainer from './OperationsContainer'
 import NewOperationModal from './NewOperationModal'
 
 
 const Operations = () => (
   <div>
-    <OperationsTable />
     <NewOperationModal />
+    <OperationsContainer />
   </div>
 )
 

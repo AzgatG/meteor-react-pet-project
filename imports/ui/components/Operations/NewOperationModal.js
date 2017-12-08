@@ -1,4 +1,5 @@
 import React from 'react';
+import Ьуеущк from 'meteor/meteor';
 import { Button, Header, Icon, Modal, Input, Form, Checkbox } from 'semantic-ui-react'
 
 
@@ -11,20 +12,33 @@ class NewOperationModal extends React.Component {
 
   getInitialState() {
     return {
-      name: '',
-      type: '',
-      amount: '',
-      comment: '',
+      operation:{
+        name: '',
+        type: '',
+        amount: '',
+        comment: '',
+      }, 
+      isOpen: false
     };
   }
 
   render() {
-    const {name, type, amount, comment} = this.state
+    const {operation: {name, type, amount, comment}} = this.state
     return (
-      <Modal trigger={<Button>New operatrion</Button>} closeIcon>
-        <Header icon='archive' content='Archive Old Messages' />
+      <Modal
+        open = { this.state.isOpen }
+        onClose = { this.clearForm }
+        trigger = {
+          <Button
+            positive
+            floated = 'right'
+            onClick = { this.handleClick }
+          >
+            New operatrion
+          </Button>
+        }
+      >
         <Modal.Content>
-
           <Form>
             <Form.Field>
               <label>Name</label>
@@ -33,7 +47,7 @@ class NewOperationModal extends React.Component {
                 placeholder='Name'
                 value = {name}
                 onChange = {this.handleChange('name')}
-                className = {this.getClassName('name')}
+                error = {this.getFieldValidation('name')}
               />
             </Form.Field>
             <Form.Field>
@@ -43,7 +57,7 @@ class NewOperationModal extends React.Component {
                 value = {type}
                 placeholder='Type'
                 onChange = {this.handleChange('type')}
-                className = {this.getClassName('type')}
+                error = {this.getFieldValidation('type')}
               />
             </Form.Field>
             <Form.Field>
@@ -53,7 +67,7 @@ class NewOperationModal extends React.Component {
                 value = {amount}
                 placeholder='Amount'
                 onChange = {this.handleChange('amount')}
-                className = {this.getClassName('amount')}
+                error = {this.getFieldValidation('amount')}
               />
             </Form.Field>
             <Form.Field>
@@ -63,13 +77,21 @@ class NewOperationModal extends React.Component {
                 value = {comment}
                 placeholder='Comment'
                 onChange = {this.handleChange('comment')}
-                className = {this.getClassName('comment')}
+                error = {this.getFieldValidation('comment')}
               />
             </Form.Field>
             <Form.Field>
               <Checkbox label='I agree to the Terms and Conditions' />
             </Form.Field>
-            <Button type='submit'>Submit</Button>
+            <Button
+              positive
+              type='button'
+              onClick = { this.handleSubmit }
+            >Save</Button>
+            <Button
+              type='button'
+              onClick = { this.closeForm }
+            >Close</Button>
           </Form>
         </Modal.Content>
       </Modal>
@@ -78,21 +100,52 @@ class NewOperationModal extends React.Component {
 
   handleSubmit = ev => {
     ev.preventDefault()
-    const {addComment, articleId} = this.props
-    addComment({...this.state}, articleId)
-    this.getInitialState()
+    console.log(this.state.operation);
+    Meteor.call('operation.insert', this.state.operation, (error, result) => {
+      if (error) {
+        console.log(error);
+        return
+      }
+
+      this.closeForm()
+    })
+    // const {addComment, articleId} = this.props
+    // addComment({...this.state}, articleId)
+    // this.getInitialState()
   }
 
   handleChange = type => ev => {
-    if (ev.target.value.length > limit[type].max) return
+    const value = ev.target.value;
+    if (value.length > limit[type].max) return
 
-    this.setState({
-      [type]: ev.target.value 
-    });
+    this.setState(prevState => ({
+      operation: {
+        ...prevState.operation,
+        [type]: value
+      } 
+    }));
   }
 
-  getClassName = type => {
-    return this.state[type].length && this.state[type].length < limit[type].min ? 'form-input__error' : ''
+  getFieldValidation = type => {
+    return this.state.operation[type] && this.state.operation[type].length < limit[type].min ? true : false
+  }
+
+  handleClick = () => {
+    this.setState({
+      isOpen: !this.state.isOpen
+    })
+  }
+
+  closeForm = () => {
+    this.setState({
+      operation: {
+        name: '',
+        type: '',
+        amount: '',
+        comment: '',
+      },
+      isOpen: false
+    });
   }
 }
 

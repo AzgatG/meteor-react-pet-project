@@ -1,12 +1,9 @@
 import React from 'react'
-import { Meteor } from 'meteor/meteor';
-import { withTracker } from 'meteor/react-meteor-data';
 import { Icon, Label, Menu, Table } from 'semantic-ui-react'
 // col
-import {Operations} from '../../../api/operations'
 
 
-const OperationsTable = () => (
+const OperationsTable = ({ operations }) => (
   <Table celled>
     <Table.Header>
       <Table.Row>
@@ -18,12 +15,9 @@ const OperationsTable = () => (
     </Table.Header>
 
     <Table.Body>
-      <Table.Row>
-        <Table.Cell>First</Table.Cell>
-        <Table.Cell>Cell</Table.Cell>
-        <Table.Cell>Cell</Table.Cell>
-        <Table.Cell>Cell</Table.Cell>
-      </Table.Row>
+      {
+        getOperationsList(operations)
+      }
     </Table.Body>
 
     <Table.Footer>
@@ -41,13 +35,15 @@ const OperationsTable = () => (
   </Table>
 )
 
+function getOperationsList(operations) {
+  return operations.map( operation => (
+    <Table.Row key = { operation._id }>
+      <Table.Cell>{ operation.name }</Table.Cell>
+      <Table.Cell>{ operation.name }</Table.Cell>
+      <Table.Cell>{ operation.name }</Table.Cell>
+      <Table.Cell>{ operation.name }</Table.Cell>
+    </Table.Row>
+  ))
+}
 
-export default withTracker(() => {
-  const sub = Meteor.subscribe('operations');
-  const loading = !sub.ready();
-
-  return {
-    loading,
-    operations: Operations.find({}).fetch(),
-  };
-})(OperationsTable);
+export default OperationsTable;
