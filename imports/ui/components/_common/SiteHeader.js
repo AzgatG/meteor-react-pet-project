@@ -1,23 +1,33 @@
 import React from 'react';
 import Meteor from 'meteor/meteor';
 import {BrowserRouter as Router, Route, NavLink, Switch} from 'react-router-dom'
+import { Menu } from 'semantic-ui-react'
 
 
 export default class SiteHeader extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <div>
         <Router>
           <div>
             <div>
-              <div><NavLink activeStyle = {{color: 'red'}} to ='/profile'>Profile</NavLink></div>
-              <div><NavLink activeStyle = {{color: 'red'}} to ='/operations'>Operations</NavLink></div>
-              <div><NavLink activeStyle = {{color: 'red'}} to ='/account'>Account</NavLink></div>
-              <div><NavLink activeStyle = {{color: 'red'}} to ='/stat'>Stat</NavLink></div>
+              <Menu>
+                <Menu.Item as={NavLink} to='/profile'>
+                  Profile
+                </Menu.Item>
+                <Menu.Item as={NavLink} to='/operations'>
+                  Operations
+                </Menu.Item>
+                <Menu.Item as={NavLink} to='/account'>
+                  Account
+                </Menu.Item>
+                <Menu.Item as={NavLink} to='/stat'>
+                  Stat
+                </Menu.Item>
+                <Menu.Menu position='right'>
+                  <Menu.Item name='logout' onClick={this.handleItemClick} />
+                </Menu.Menu>
+              </Menu>
             </div>
             <div>
               <Switch>
@@ -32,6 +42,10 @@ export default class SiteHeader extends React.Component {
          { this.props.children }
       </div>
     );
+  }
+
+  handleItemClick() {
+    console.log('-----', 'log out')
   }
 
   getBody = ({ match }) => {

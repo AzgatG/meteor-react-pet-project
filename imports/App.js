@@ -12,25 +12,11 @@ export default class App extends React.Component {
       <div>
         <Router>
           <Switch>
-            <Route exact path="/login" render={this.getLoginBody} />
-            <Route exact path="/" render={this.getBody}/>
-            <Route path="/products" render={this.getBody}/>
-            <Route path="*" component={NotFound}/>
+            <Route path="/" component={ DefaultLayout }/>
+            {/*<Route component={NotFound}/>*/}
           </Switch>
         </Router>
       </div>
     );
-  }
-
-  getBody() {
-    return (
-      <DefaultLayout>
-        <h1>Привет</h1>
-      </DefaultLayout>
-    )
-  }
-
-  getLoginBody() {
-    return <AuthLayout>Ghbdtn</AuthLayout>
   }
 }
