@@ -3,6 +3,8 @@ import Meteor from 'meteor/meteor';
 import {BrowserRouter as Router, Route, NavLink, Switch} from 'react-router-dom'
 import { Menu } from 'semantic-ui-react'
 
+import Operations from '../Operations'
+
 
 export default class SiteHeader extends React.Component {
   render() {
@@ -32,7 +34,7 @@ export default class SiteHeader extends React.Component {
             <div>
               <Switch>
                 <Route path = '/profile' render = {this.getBody} />
-                <Route path = '/operations' render = {this.getBody} />
+                <Route path = '/operations' component = { Operations } />
                 <Route path = '/account' render = {this.getBody} />
                 <Route path = '/stat' render = {this.getBody} />
               </Switch>

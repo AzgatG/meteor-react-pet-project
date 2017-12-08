@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 // collections
-import '../imports/api/operatons.js'
+import '../imports/api/operations.js'
 import '../imports/api/transfers.js'
 import '../imports/api/accounts.js'
 
